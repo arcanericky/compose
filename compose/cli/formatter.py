@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import logging
 import os
+import sys
 
 import six
 import texttable
@@ -11,10 +12,12 @@ from compose.cli import colors
 
 
 def get_tty_width():
-    tty_size = os.popen('stty size 2> /dev/null', 'r').read().split()
-    if len(tty_size) != 2:
-        return 0
-    _, width = tty_size
+    width = 0
+    if sys.stdout.isatty():
+        tty_size = os.popen('stty size 2> /dev/null', 'r').read().split()
+        if len(tty_size) == 2:
+            _, width = tty_size
+
     return int(width)
 
 
